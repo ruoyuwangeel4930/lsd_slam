@@ -19,6 +19,7 @@ set(CMAKE_MODULE_PATH   ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 find_package(Eigen3 REQUIRED)
 find_package(SuiteParse REQUIRED) # Apparently needed by g2o
 find_package(X11 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 # FabMap
 # uncomment this part to enable fabmap
@@ -89,10 +90,12 @@ rosbuild_link_boost(lsdslam thread)
 
 # build live ros node
 rosbuild_add_executable(live_slam src/main_live_odometry.cpp)
-target_link_libraries(live_slam lsdslam)
-
+target_link_libraries(live_slam lsdslam ${OpenCV_LIBRARIES} -lboost_system)
+#rosbuild_link_boost(live_slam thread)
 
 # build image node
+
 rosbuild_add_executable(dataset_slam src/main_on_images.cpp)
-target_link_libraries(dataset_slam lsdslam)
+target_link_libraries(dataset_slam lsdslam ${OpenCV_LIBRARIES} -lboost_system)
+#rosbuild_link_boost(dataset_slam thread)
 
